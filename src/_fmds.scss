@@ -1,0 +1,20 @@
+/* ========================================================
+   FLUID MULTIPLIER DESIGN SYSTEM (FMDS) - CORE SETUP
+   Philosophy: All dimensions = calc(var(--1) * VALUE)
+======================================================== */
+
+:root {
+  /* Desktop Base (1920px canvas): 1px = 100vw / 1920 = 0.052083vw */
+  /* min(1px, 0.052083vw) caps at 1px for viewports > 1920px (e.g. 2K, 4K) */
+  --1: min(1px, 0.052083vw);
+
+  /* Tablet Breakpoint (768px - 1199.98px) */
+  @media (min-width: 768px) and (max-width: 1199.98px) {
+    --1: min(1px, 0.059435vw);
+  }
+
+  /* Mobile Breakpoint (< 767.98px): 500px canvas -> 1px = 100vw / 500 = 0.2vw */
+  @media (max-width: 767.98px) {
+    --1: min(1px, 0.2vw);
+  }
+}

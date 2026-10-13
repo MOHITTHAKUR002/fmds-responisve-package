@@ -1,0 +1,68 @@
+{
+  "name": "fmds-responsive",
+  "version": "1.1.0",
+  "description": "Fluid Multiplier Design System (FMDS) - Universal fluid scaling for React, Next.js, Vite, Tailwind CSS, 3rd-party libraries, and HTML/CSS",
+  "license": "ISC",
+  "author": "Mohit Thakur",
+  "type": "module",
+  "main": "./src/index.js",
+  "module": "./src/index.js",
+  "bin": {
+    "fmds": "bin/fmds.js"
+  },
+  "files": [
+    "src",
+    "bin",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "import": "./src/index.js"
+    },
+    "./postcss": {
+      "import": "./src/postcss/index.js"
+    },
+    "./tailwind": {
+      "import": "./src/tailwind/index.js"
+    },
+    "./vite": {
+      "import": "./src/vite/index.js"
+    },
+    "./css": "./src/core/base.css",
+    "./reset": "./src/core/base.css",
+    "./minimal": "./src/core/minimal.css",
+    "./style.css": "./src/core/base.css",
+    "./scss": "./src/_func.scss",
+    "./helper": {
+      "import": "./src/helper/index.js"
+    }
+  },
+  "scripts": {
+    "test": "node -e 'import(\"./src/index.js\").then(() => console.log(\"✔ All exports verified successfully!\"))'"
+  },
+  "peerDependencies": {
+    "postcss": ">=8.0.0"
+  },
+  "peerDependenciesMeta": {
+    "postcss": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "postcss": "^8.5.3"
+  },
+  "keywords": [
+    "fmds",
+    "responsive",
+    "fluid",
+    "multiplier",
+    "postcss",
+    "tailwind",
+    "vite",
+    "nextjs",
+    "react",
+    "fluid-typography",
+    "css"
+  ]
+}

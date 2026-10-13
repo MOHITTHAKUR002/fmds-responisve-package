@@ -1,0 +1,90 @@
+/**
+ * Fluid Multiplier Design System (FMDS) - Base Multiplier & Fluid Defaults
+ * Base Unit: --1
+ * Formula: calc(var(--1) * VALUE)
+ */
+
+:root {
+  /* Desktop (1920px canvas): 1px = 100vw / 1920 = 0.052083vw */
+  /* Caps at 1px on screens >= 1920px (2K, 4K, ultra-wide) */
+  --1: min(1px, 0.052083vw);
+}
+
+/* Tablet Breakpoint (768px - 1199.98px) */
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  :root {
+    --1: min(1px, 0.059435vw);
+  }
+}
+
+/* Mobile Breakpoint (< 767.98px): 500px canvas -> 0.2vw */
+@media (max-width: 767.98px) {
+  :root {
+    --1: min(1px, 0.2vw);
+  }
+}
+
+/*
+ * 1. Root Rem Multiplier
+ * Standard rem is 16px. Setting html font-size to calc(var(--1) * 16) enables
+ * automatic fluid scaling for all 3rd-party libraries using rem units
+ * (Tailwind CSS, Bootstrap, Shadcn UI, MUI, Swiper, etc.).
+ */
+html {
+  font-size: calc(var(--1) * 16);
+  -webkit-text-size-adjust: 100%;
+}
+
+/*
+ * 2. Fluid HTML Element Defaults
+ * Scales native HTML tags fluidly even without custom CSS or utility classes.
+ */
+body {
+  font-size: calc(var(--1) * 16);
+  line-height: 1.5;
+}
+
+h1 {
+  font-size: calc(var(--1) * 32);
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: calc(var(--1) * 26);
+  line-height: 1.25;
+}
+
+h3 {
+  font-size: calc(var(--1) * 22);
+  line-height: 1.3;
+}
+
+h4 {
+  font-size: calc(var(--1) * 18);
+  line-height: 1.4;
+}
+
+h5 {
+  font-size: calc(var(--1) * 16);
+  line-height: 1.4;
+}
+
+h6 {
+  font-size: calc(var(--1) * 14);
+  line-height: 1.4;
+}
+
+p, span, li, a, label {
+  font-size: inherit;
+}
+
+small {
+  font-size: calc(var(--1) * 12);
+}
+
+/* Inherit fluid font size for inputs, buttons, and form controls */
+button, input, optgroup, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: 1.15;
+}
