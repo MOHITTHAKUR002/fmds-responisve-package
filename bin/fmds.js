@@ -17,6 +17,8 @@ function printHelp() {
   console.log(`
 Fluid Multiplier Design System (FMDS) CLI
 
+Website & Docs: https://fmds-responsive.quadops.in/
+
 Usage:
   fmds <input.css> -o <output.css> [options]
 

@@ -3,6 +3,13 @@
 > **Universal fluid responsive scaling for Next.js, React, Vite, Tailwind CSS, and HTML/CSS.**  
 > Write regular `px` values (e.g. `16px`, `32px`) — FMDS transforms them into mathematically fluid units across all viewports.
 
+[![Official Website](https://img.shields.io/badge/Website-fmds--responsive.quadops.in-blue?style=flat-square&logo=googlechrome&logoColor=white)](https://fmds-responsive.quadops.in/)
+[![npm version](https://img.shields.io/npm/v/fmds-responsive.svg?style=flat-square&color=cb3837&logo=npm)](https://www.npmjs.com/package/fmds-responsive)
+[![License: ISC](https://img.shields.io/badge/License-ISC-brightgreen.svg?style=flat-square)](https://opensource.org/licenses/ISC)
+
+🌐 **Official Website & Interactive Docs:** [https://fmds-responsive.quadops.in/](https://fmds-responsive.quadops.in/)  
+📦 **npm Package:** [npmjs.com/package/fmds-responsive](https://www.npmjs.com/package/fmds-responsive)  
+
 ---
 
 ## ⚡ The Philosophy

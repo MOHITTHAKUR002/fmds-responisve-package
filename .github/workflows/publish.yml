@@ -1,0 +1,109 @@
+name: Publish with Provenance
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  publish:
+    name: Publish to npm with SLSA Provenance
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Test Verification
+        run: npm test
+
+      - name: Publish with Provenance
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  sync-web-docs:
+    name: Auto-Sync Web Documentation & Trigger Vercel
+    needs: publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Package Repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Extract Published Version
+        id: pkg_version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Package version to sync: $VERSION"
+
+      - name: Checkout Web Docs Repo
+        uses: actions/checkout@v4
+        with:
+          repository: 'MOHITTHAKUR002/fmds-responisve-web'
+          token: ${{ secrets.GH_PAT || secrets.WEB_DEPLOY_TOKEN || github.token }}
+          path: 'web-repo'
+
+      - name: Update Web Version & Lockfile
+        run: |
+          cd web-repo
+          VERSION="${{ steps.pkg_version.outputs.version }}"
+          echo "Updating web documentation repo for FMDS v$VERSION..."
+
+          # Update version and dependencies in package.json
+          node -e "
+            const fs = require('fs');
+            const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+            pkg.version = '$VERSION';
+            if (pkg.dependencies && pkg.dependencies['fmds-responsive']) {
+              pkg.dependencies['fmds-responsive'] = '^' + '$VERSION';
+            }
+            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
+          "
+
+          # Update .env.production
+          echo "# Auto-generated on package release" > .env.production
+          echo "NEXT_PUBLIC_FMDS_VERSION=$VERSION" >> .env.production
+
+          # Update package-lock.json with the new version
+          npm install --package-lock-only || npm install --legacy-peer-deps
+
+          # Setup Git
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Commit & Push if any file changed
+          git add package.json package-lock.json .env.production
+          if git diff --staged --quiet; then
+            echo "No changes detected to commit."
+          else
+            git commit -m "chore(release): auto-bump fmds-responsive to v$VERSION [skip ci]"
+            git push origin main
+            echo "Successfully pushed to fmds-responisve-web! Vercel auto-build triggered."
+          fi
+
+      - name: Trigger Vercel Deploy Hook (If Configured)
+        if: env.VERCEL_DEPLOY_HOOK != ''
+        env:
+          VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+        run: |
+          echo "Triggering Vercel Deploy Hook..."
+          curl -s -X POST "$VERCEL_DEPLOY_HOOK"
+          echo "Vercel Deploy Hook pinged successfully!"

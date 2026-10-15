@@ -1,0 +1,39 @@
+name: Security & CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Run weekly dependency security scan on Monday at midnight
+    - cron: '0 0 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  audit-and-test:
+    name: Audit & Test Verification
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Verify Package Exports & Test
+        run: npm test
+
+      - name: Audit Production Dependencies
+        run: npm audit --audit-level=high --omit=dev
+
+      - name: Verify Clean Tarball Packing
+        run: npm pack --dry-run
