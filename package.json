@@ -11,7 +11,7 @@
   "homepage": "https://fmds-responsive.quadops.in/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MOHITTHAKUR002/fmds-responisve-package.git"
+    "url": "git+https://github.com/MOHITTHAKUR002/fmds-responisve-package.git"
   },
   "bugs": {
     "url": "https://github.com/MOHITTHAKUR002/fmds-responisve-package/issues"
